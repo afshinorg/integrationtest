@@ -1,21 +1,22 @@
 ﻿using Catalog.API.Entities;
 using MongoDB.Driver;
 
-namespace Catalog.API.Data
+namespace Catalog.API.Data;
+public class CatalogContextSeed
 {
-    public class CatalogContextSeed
+    public static void SeedData(IMongoCollection<Product> productCollection)
     {
-        public static void SeedData(IMongoCollection<Product> productCollection) {
-           
-            bool exitProduct = productCollection.Find(p => true).Any();
-            if (!exitProduct) {
-                productCollection.InsertManyAsync(GetPreconfiguredProducts());
-            }
-        }
 
-        private static IEnumerable<Product> GetPreconfiguredProducts()
+        bool exitProduct = productCollection.Find(p => true).Any();
+        if (!exitProduct)
         {
-            return new List<Product>()
+            productCollection.InsertManyAsync(GetPreconfiguredProducts());
+        }
+    }
+
+    private static IEnumerable<Product> GetPreconfiguredProducts()
+    {
+        return new List<Product>()
             {
                 new Product()
                 {
@@ -78,6 +79,6 @@ namespace Catalog.API.Data
                     Category = "Home Kitchen"
                 }
             };
-        }
     }
 }
+
