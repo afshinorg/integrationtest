@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Behaviours\" />
+    <Folder Include="Features\Order\Command\DeleteOrder\" />
   </ItemGroup>
 
   <ItemGroup>
