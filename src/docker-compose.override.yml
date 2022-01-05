@@ -27,14 +27,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
-  #orderdb:
-  #  container_name: orderdb
-  #  environment:
-  #      SA_PASSWORD: "SwwN345678@#"
-  #      ACCEPT_EULA: "Y"
-  #  restart: always
-  #  ports:
-  #      - "1433:1433"
+  orderdb:
+    container_name: orderdb
+    environment:
+        SA_PASSWORD: "Sww_N345678@#"
+        ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+        - "1433:1433"
 
   #rabbitmq:
   #  container_name: rabbitmq
@@ -111,18 +111,18 @@ services:
     ports:
       - "8003:80"
   
-  #ordering.api:
-  #  container_name: ordering.api
-  #  environment:
-  #      - ASPNETCORE_ENVIRONMENT=Development
-  #      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=SwwN345678@#"            
-  #      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-  #      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
-  #  depends_on:
-  #      - orderdb
-  #      - rabbitmq
-  #  ports:
-  #      - "8004:80"
+  ordering.api:
+    container_name: ordering.api
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=Sww_N345678@#;MultipleActiveResultSets=true"            
+        - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+        - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+        - orderdb
+        #- rabbitmq
+    ports:
+        - "8004:80"
 
   #ocelotapigw:
   #  container_name: ocelotapigw
