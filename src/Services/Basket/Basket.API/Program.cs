@@ -38,7 +38,6 @@ builder.Services.AddMassTransit(config =>
     {
         // config.Host(builder.Configuration["EventBusSettings:HostAddress"]);
         config.Host("amqp://guest:guest@localhost:5672"); // Local connection
-        // config.UseHealthCheck(context);
     });
 });
 builder.Services.AddMassTransitHostedService();
