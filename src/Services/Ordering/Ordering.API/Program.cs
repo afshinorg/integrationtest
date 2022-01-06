@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddScoped<BasketCheckoutConsumer>();
+
 // MassTransit-RabbitMQ Configuration
 builder.Services.AddMassTransit(config => {
 
@@ -28,6 +30,7 @@ builder.Services.AddMassTransit(config => {
 });
 builder.Services.AddMassTransitHostedService();
 
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -36,6 +39,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // All the injected classes
 builder.Services.AddApplicationServices();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
