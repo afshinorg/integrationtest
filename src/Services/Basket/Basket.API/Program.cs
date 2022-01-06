@@ -17,11 +17,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Redis
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetValue<string>("CacheSettings:ConnectionString");
+    options.Configuration = builder.Configuration.GetValue<string>("CacheSettings__ConnectionString=basketdb");
 });
 
 // Every time you you see IRepository create Repository Object
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+// Check if automapper works
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
 builder.Services.AddScoped<DiscountGrpcService>();
 builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
                         (o => o.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]));
@@ -36,8 +39,8 @@ builder.Services.AddMassTransit(config =>
 {
     config.UsingRabbitMq((context, config) =>
     {
-        // config.Host(builder.Configuration["EventBusSettings:HostAddress"]);
-        config.Host("amqp://guest:guest@localhost:5672"); // Local connection
+        config.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+        // config.Host("amqp://guest:guest@localhost:5672"); // Local connection
     });
 });
 builder.Services.AddMassTransitHostedService();

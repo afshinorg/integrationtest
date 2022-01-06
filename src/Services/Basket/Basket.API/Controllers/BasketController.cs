@@ -1,6 +1,9 @@
-﻿using Basket.API.Entities;
+﻿using AutoMapper;
+using Basket.API.Entities;
 using Basket.API.GrpcServices;
 using Basket.API.Repositories;
+using EventBus.Messages.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -12,16 +15,15 @@ public class BasketController : ControllerBase
 {
     private readonly IBasketRepository _repository;
     private readonly DiscountGrpcService _discountGrpcService;
-    //private readonly IPublishEndpoint _publishEndpoint;
-    // private readonly IMapper _mapper;
+    private readonly IPublishEndpoint _publishEndpoint; // MassTransit
+    private readonly IMapper _mapper;
 
-
-    public BasketController(IBasketRepository repository, DiscountGrpcService discountGrpcService)
+    public BasketController(IBasketRepository repository, DiscountGrpcService discountGrpcService, IPublishEndpoint publishEndpoint, IMapper mapper)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         _discountGrpcService = discountGrpcService ?? throw new ArgumentNullException(nameof(discountGrpcService));
-        // _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
-        // _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     [HttpGet("{userName}", Name = "GetBasket")]
@@ -36,7 +38,7 @@ public class BasketController : ControllerBase
     [ProducesResponseType(typeof(ShoppingCart), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<ShoppingCart>> UpdateBasket([FromBody] ShoppingCart basket)
     {
-        //// Add this to add discounts -> Communicate with Discount.Grpc and calculate lastest prices of products into sc
+        // Add this to add discounts -> Communicate with Discount.Grpc and calculate lastest prices of products into sc
         foreach (var item in basket.Items)
         {
             var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
@@ -60,7 +62,8 @@ public class BasketController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> Checkout([FromBody] BasketCheckout basketCheckout)
     {
-        // Steps
+        // Psudocode
+        // Steps for RabbitMQ
         // get existing basket with total price            
         // Set TotalPrice on basketCheckout eventMessage
         // send checkout event to rabbitmq
@@ -73,10 +76,10 @@ public class BasketController : ControllerBase
             return BadRequest(); // from HttpStatusCode.BadRequest
         }
 
-        //// send checkout event to rabbitmq
-        //var eventMessage = _mapper.Map<BasketCheckoutEvent>(basketCheckout);
-        //eventMessage.TotalPrice = basket.TotalPrice;
-        //await _publishEndpoint.Publish<BasketCheckoutEvent>(eventMessage);
+        // send checkout event to rabbitmq
+        var eventMessage = _mapper.Map<BasketCheckoutEvent>(basketCheckout);
+        eventMessage.TotalPrice = basket.TotalPrice;
+        await _publishEndpoint.Publish<BasketCheckoutEvent>(eventMessage);
 
         // remove the basket
         await _repository.DeleteBasket(basket.UserName);
