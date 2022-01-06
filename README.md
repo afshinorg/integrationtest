@@ -85,6 +85,9 @@ Ordering Microservice
     
  
  ![image](https://user-images.githubusercontent.com/16746699/148371219-9f963a85-366b-45d4-b39a-0159eb55e128.png
+ 
+ ![image](https://user-images.githubusercontent.com/16746699/148427468-356d4867-fa3a-45c2-a447-a13ea52ac533.png)
+
 
 API Gateway Ocelot Microservice
 
