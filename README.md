@@ -95,6 +95,12 @@ API Gateway Ocelot Microservice
     Sample microservices/containers to reroute through the API Gateways
     Shopping.Aggregator -> Gateway aggregation pattern 
 
+![image](https://user-images.githubusercontent.com/16746699/148507358-203c403e-37b4-499e-b79b-f70f14d9cc3f.png)
+
+![image](https://user-images.githubusercontent.com/16746699/148507860-38994151-9b8f-47e4-af39-1e0564a34459.png)
+
+
+
 WebUI ShoppingApp Microservice
 
     ASP.NET Core Web Application with Bootstrap 4 and Razor
