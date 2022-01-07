@@ -52,11 +52,11 @@ services:
       context: .
       dockerfile: Services/Ordering/Ordering.API/Dockerfile
 
-  #ocelotapigw:
-  #  image: ${DOCKER_REGISTRY-}ocelotapigw
-  #  build:
-  #    context: .
-  #    dockerfile: ApiGateways/OcelotApiGw/Dockerfile  
+  ocelotapigw:
+    image: ${DOCKER_REGISTRY-}ocelotapigw
+    build:
+      context: .
+      dockerfile: ApiGateways/OcelotApiGw/Dockerfile  
 
   #shopping.aggregator:
   #  image: ${DOCKER_REGISTRY-}shoppingaggregator
