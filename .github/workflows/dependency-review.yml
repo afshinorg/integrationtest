@@ -1,0 +1,38 @@
+# Dependency Review Action
+#
+# This Action will scan dependency manifest files that change as part of a Pull Request, surfacing known-vulnerable versions of the packages declared or updated in the PR. Once installed, if the workflow run is marked as required, PRs introducing known-vulnerable packages will be blocked from merging.
+#
+# Source repository: https://github.com/actions/dependency-review-action
+# Public documentation: https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review#dependency-review-enforcement
+name: 'Dependency Review'
+on: [pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v3
+      - name: 'Dependency Review'
+        uses: actions/dependency-review-action@main
+        with:
+          repo-token: ${{ secrets.REPO_TOKEN }}
+
+- name: AppInspector
+  uses: microsoft/ApplicationInspector-Action@v1
+  with:
+    # The path relative to repository root to scan.
+    location-to-scan: # optional, default is GITHUB_WORKSPACE
+    # The path relative to file root to output to.
+    output-path: # optional, default is AppInspectorResults
+    # Output format [html|json|text]
+    output-format: # optional, default is json
+    # Comma separated list of file path patterns to exclude.
+    file-path-exclusions: # optional, default is ,
+    # Other arguments to Application AppInspector
+    arguments: # optional, default is 
+    
+  
